@@ -33,7 +33,7 @@ type Config struct {
 func loadIni(filePath string, data interface{}) (err error) {
 	/*
 		1 参数校验
-			1.1 data为指针类型
+			1.1 data为指针类型, 因为需要满足 setability
 			1.2 data为结构体指针
 		2 读取文件,得到字节切片
 		3 按行读取数据
@@ -44,17 +44,18 @@ func loadIni(filePath string, data interface{}) (err error) {
 
 	// Config中单个配置节点的名称
 	var structName string
+    // 判断类型, 使用Typeof
 	dataType := reflect.TypeOf(data)
 	if dataType.Kind() != reflect.Ptr && dataType.Elem().Kind() != reflect.Struct {
 		err = fmt.Errorf("为了能将解析出的值返回给您, 请传入结构体指针")
 	}
-
+    // ioutil.ReadFile(path) 一次性将配置文件读取出来
 	bytes, err2 := ioutil.ReadFile(filePath)
 	if err2 != nil {
 		fmt.Printf("error: %v\n", err)
 		return
 	}
-
+    // 使用strings工具, 将读取到的字节流按照 \r\n 回车换行切割(windows)
 	lines := strings.Split(string(bytes), "\r\n")
 
 	for index, line := range lines {
