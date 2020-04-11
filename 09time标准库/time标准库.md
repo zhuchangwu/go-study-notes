@@ -140,7 +140,7 @@ func Parse(){
 		return
 	}
 	// 按照指定时区和指定格式解析字符串时间
-	timeObj, err := time.ParseInLocation("2006/01/02 15:04:05", "2019/08/04 14:15:20", loc)
+	timeObj, err := time.ParseInLocation("2006/01/02 15:04:05", "2019/08/04 15:14:20", loc)
 	if err != nil {
 		fmt.Println(err)
 		return
